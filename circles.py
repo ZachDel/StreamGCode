@@ -113,6 +113,14 @@ def app():
                     YY = np.append(YY, Y)
         return XX, YY
 
+    def rotation_circle(x_center, y_center, theta):
+        global GP 
+        xx, yy = x_center - GP.CENTERX, y_center - GP.CENTERY
+        rotX = GP.CENTERX + xx*np.cos(theta*np.pi/180) + yy*np.sin(theta*np.pi/180)
+        rotY = GP.CENTERY - xx*np.sin(theta*np.pi/180) + yy*np.cos(theta*np.pi/180)
+        if theta > 0 : rotX, rotY = rotation_circle(x_center, y_center, theta)
+        return rotX, rotY  
+    
     def update_GP_circle():
         """
         Update the global 'structure' object based on the defined parameters
@@ -230,6 +238,9 @@ def app():
         "Step between lines in the grid (mm):", value=5., step=1., min_value=0.)
     delta = col2.number_input(
         "Spacing between outer circle and grid (mm):", value=20., step=0.1, min_value=0.)
+    
+    theta = col1.number_input(
+        "Angle", value=90, step=1., min_value=0)
 
     st.sidebar.write("## Other parameters")
     remote_voltage = st.sidebar.checkbox(
